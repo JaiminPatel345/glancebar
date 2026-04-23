@@ -1,6 +1,6 @@
 #!/bin/bash
 # ─────────────────────────────────────────────────────────────
-#  Desktop Widget - One-time Setup Script
+#  Glancebar - One-time Setup Script
 #  Run once: bash setup.sh
 # ─────────────────────────────────────────────────────────────
 
@@ -21,7 +21,7 @@ sudo apt install -y \
 
 echo ""
 echo "📁 Creating config directory..."
-mkdir -p ~/.config/desktop-widget
+mkdir -p ~/.config/glancebar
 
 echo ""
 echo "✅ Setup complete!"
@@ -33,7 +33,7 @@ echo "  USER_NAME = 'Your Name'     ← your name"
 echo "  CITY      = 'New York'      ← your city (for weather)"
 echo ""
 echo "  Profile photo (optional):"
-echo "  Copy your photo to:  ~/.config/desktop-widget/profile.jpg"
+echo "  Copy your photo to:  ~/.config/glancebar/profile.jpg"
 echo "─────────────────────────────────────────────────────"
 echo ""
 echo "▶  Run the widget:"

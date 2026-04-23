@@ -1,4 +1,4 @@
-# my-widget — Claude Instructions
+# glancebar — Claude Instructions
 
 ## Project Overview
 GTK3 desktop widget for Ubuntu using Cairo for custom drawing. Python 3, no Qt.

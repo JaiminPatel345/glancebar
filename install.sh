@@ -4,7 +4,7 @@ set -e
 
 echo ""
 echo "╔══════════════════════════════════════╗"
-echo "║   Desktop Widget Installer           ║"
+echo "║   Glancebar Installer                ║"
 echo "╚══════════════════════════════════════╝"
 echo ""
 
@@ -46,10 +46,10 @@ echo "▶ Setting up autostart..."
 mkdir -p "$HOME/.config/autostart"
 WIDGET_PATH="$(realpath "$(dirname "$0")/widget.py")"
 
-cat > "$HOME/.config/autostart/desktop-widget.desktop" <<EOF
+cat > "$HOME/.config/autostart/glancebar.desktop" <<EOF
 [Desktop Entry]
 Type=Application
-Name=Desktop Widget
+Name=Glancebar
 Comment=Glassmorphism desktop widget
 Exec=python3 $WIDGET_PATH
 StartupNotify=false

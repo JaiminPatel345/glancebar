@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=Desktop Widget
+Name=Glancebar
 Comment=Glassmorphism desktop widget - clock, music, apps, toggles
-Exec=python3 /home/YOUR_USERNAME/desktop_widget/widget.py
+Exec=python3 /home/YOUR_USERNAME/glancebar/widget.py
 StartupNotify=false
 X-GNOME-Autostart-enabled=true

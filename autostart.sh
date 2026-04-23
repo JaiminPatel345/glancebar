@@ -4,14 +4,14 @@
 
 WIDGET_PATH="$(realpath widget.py)"
 AUTOSTART_DIR="$HOME/.config/autostart"
-DESKTOP_FILE="$AUTOSTART_DIR/desktop-widget.desktop"
+DESKTOP_FILE="$AUTOSTART_DIR/glancebar.desktop"
 
 mkdir -p "$AUTOSTART_DIR"
 
 cat > "$DESKTOP_FILE" <<EOF
 [Desktop Entry]
 Type=Application
-Name=Desktop Widget
+Name=Glancebar
 Exec=python3 $WIDGET_PATH
 Hidden=false
 NoDisplay=false
