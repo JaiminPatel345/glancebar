@@ -37,6 +37,7 @@ class LeftPanel(Gtk.DrawingArea):
         self._tog_states = [False] * len(self._toggles)
         self._hover = -1
         self._profile = self._load_profile()
+        self._display_name = self._load_display_name()
         self.set_events(
             Gdk.EventMask.BUTTON_PRESS_MASK |
             Gdk.EventMask.POINTER_MOTION_MASK |
@@ -50,16 +51,42 @@ class LeftPanel(Gtk.DrawingArea):
         threading.Thread(target=self._detect_states, daemon=True).start()
 
     def _load_profile(self):
-        for p in [CFG["profile_image"],
-                  os.path.expanduser("~/Pictures/profile.png"),
-                  os.path.expanduser("~/Pictures/avatar.jpg")]:
-            if os.path.exists(p):
+        import getpass
+        username = getpass.getuser()
+        for p in [
+            CFG["profile_image"],
+            f"/var/lib/AccountsService/icons/{username}",
+            os.path.expanduser("~/Pictures/profile.png"),
+            os.path.expanduser("~/Pictures/profile.jpg"),
+            os.path.expanduser("~/Pictures/avatar.jpg"),
+        ]:
+            if p and os.path.exists(p):
                 try:
                     pb = GdkPixbuf.Pixbuf.new_from_file_at_scale(p, 130, 130, True)
                     return _pb_to_surface(pb)
                 except Exception:
                     pass
         return None
+
+    def _load_display_name(self):
+        name = CFG.get("display_name", "")
+        if not name or name in ["Jaimin Detroja", "Your Name", "display_name"]:
+            try:
+                import pwd
+                import getpass
+                username = getpass.getuser()
+                gecos = pwd.getpwnam(username).pw_gecos
+                real_name = gecos.split(',')[0].strip()
+                if real_name:
+                    return real_name
+                return username.capitalize()
+            except Exception:
+                try:
+                    import getpass
+                    return getpass.getuser().capitalize()
+                except Exception:
+                    pass
+        return name if name else "User"
 
     def _fetch_weather(self):
         if not HAS_REQUESTS:
@@ -150,8 +177,8 @@ class LeftPanel(Gtk.DrawingArea):
 
         cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
         cr.set_font_size(20); sc(cr, PINK)
-        ne = cr.text_extents(CFG["display_name"])
-        cr.move_to(w / 2 - ne.width / 2, 183); cr.show_text(CFG["display_name"])
+        ne = cr.text_extents(self._display_name)
+        cr.move_to(w / 2 - ne.width / 2, 183); cr.show_text(self._display_name)
 
         cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
         cr.set_font_size(11); sc(cr, GREY)
