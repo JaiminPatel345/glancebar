@@ -9,29 +9,57 @@ echo "╚═══════════════════════�
 echo ""
 
 # ── System packages ──
-echo "▶ Updating package list..."
-sudo apt-get update -y -qq
+if command -v dnf &> /dev/null; then
+    echo "▶ Fedora/RedHat system detected (using dnf)"
+    echo "▶ Installing system packages..."
+    sudo dnf install -y \
+        python3-gobject \
+        python3-cairo \
+        gtk3 \
+        playerctl \
+        redshift \
+        NetworkManager \
+        bluez \
+        curl \
+        gnome-calculator \
+        python3-requests
 
-echo ""
-echo "▶ Installing system packages..."
-sudo apt-get install -y \
-    python3-gi \
-    python3-gi-cairo \
-    gir1.2-gtk-3.0 \
-    gir1.2-gdk-3.0 \
-    playerctl \
-    redshift \
-    network-manager \
-    bluetooth \
-    bluez \
-    curl \
-    gnome-calculator \
-    python3-requests
+    # ── Fonts (optional but recommended) ──
+    echo ""
+    echo "▶ Installing fonts..."
+    sudo dnf install -y jetbrains-mono-fonts 2>/dev/null || true
 
-# ── Fonts (optional but recommended) ──
-echo ""
-echo "▶ Installing fonts..."
-sudo apt-get install -y fonts-jetbrains-mono 2>/dev/null || true
+elif command -v apt-get &> /dev/null; then
+    echo "▶ Debian/Ubuntu system detected (using apt)"
+    echo "▶ Updating package list..."
+    sudo apt-get update -y -qq
+
+    echo ""
+    echo "▶ Installing system packages..."
+    sudo apt-get install -y \
+        python3-gi \
+        python3-gi-cairo \
+        gir1.2-gtk-3.0 \
+        gir1.2-gdk-3.0 \
+        playerctl \
+        redshift \
+        network-manager \
+        bluetooth \
+        bluez \
+        curl \
+        gnome-calculator \
+        python3-requests
+
+    # ── Fonts (optional but recommended) ──
+    echo ""
+    echo "▶ Installing fonts..."
+    sudo apt-get install -y fonts-jetbrains-mono 2>/dev/null || true
+
+else
+    echo "❌ Error: Package manager not supported (neither dnf nor apt-get found)."
+    echo "   Please install dependencies manually."
+    exit 1
+fi
 
 # ── Profile image placeholder ──
 if [ ! -f "$HOME/Pictures/profile.jpg" ]; then
