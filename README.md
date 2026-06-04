@@ -78,7 +78,7 @@ You do **not** need to install anything manually — `install.sh` handles GTK3, 
 A few extra things to know if you're on Arch:
 
 - **Run `sudo pacman -Syu` first.** `install.sh` uses `pacman -S` (not `-Sy`) to avoid the [partial-upgrade footgun](https://wiki.archlinux.org/title/System_maintenance#Partial_upgrades_are_unsupported). Make sure your system is up to date before running it.
-- **Night-mode toggle (`redshift`) does not work on Wayland.** GNOME on Arch defaults to a Wayland session, and `redshift` is X11-only (upstream archived in 2026). Three options:
+- **Night-mode toggle (`redshift`) does not work on Wayland.** GNOME on Arch defaults to a Wayland session, and `redshift` is X11-only and long unmaintained upstream. Three options:
   1. Pick the **"GNOME on Xorg"** session at login if you want `redshift` to work as-is.
   2. On Wayland, switch the night toggle to GNOME's built-in Night Light by editing `config.json`:
      ```json

@@ -61,11 +61,15 @@ elif command -v pacman &> /dev/null; then
     sudo systemctl enable --now bluetooth.service 2>/dev/null || true
 
     # ── lp group (required for bluetoothctl on Arch) ──
+    : "${USER:=$(id -un)}"
     if ! id -nG "$USER" | grep -qw lp; then
         echo ""
         echo "▶ Adding $USER to 'lp' group (required for Bluetooth toggle on Arch)..."
-        sudo gpasswd -a "$USER" lp
-        echo "   ⚠️  You must log out and log back in before the Bluetooth toggle will work."
+        if sudo gpasswd -a "$USER" lp; then
+            echo "   ⚠️  You must log out and log back in before the Bluetooth toggle will work."
+        else
+            echo "   ⚠️  Couldn't add $USER to 'lp' group automatically — run 'sudo gpasswd -a $USER lp' manually."
+        fi
     fi
 
 elif command -v apt-get &> /dev/null; then
