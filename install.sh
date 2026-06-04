@@ -22,7 +22,8 @@ if command -v dnf &> /dev/null; then
         bluez \
         curl \
         gnome-calculator \
-        python3-requests
+        python3-requests \
+        xdg-utils
 
     # ── Fonts (optional but recommended) ──
     echo ""
@@ -32,7 +33,8 @@ if command -v dnf &> /dev/null; then
 elif command -v pacman &> /dev/null; then
     echo "▶ Arch Linux system detected (using pacman)"
     echo "▶ Installing system packages..."
-    sudo pacman -Sy --noconfirm --needed \
+    echo "  (assumes 'sudo pacman -Syu' was run recently — using -S to avoid partial-upgrade risk)"
+    sudo pacman -S --noconfirm --needed \
         python-gobject \
         python-cairo \
         gtk3 \
@@ -43,12 +45,32 @@ elif command -v pacman &> /dev/null; then
         bluez-utils \
         curl \
         gnome-calculator \
-        python-requests
+        python-requests \
+        xdg-utils \
+        libpulse
 
     # ── Fonts (optional but recommended) ──
     echo ""
     echo "▶ Installing fonts..."
     sudo pacman -S --noconfirm --needed ttf-jetbrains-mono 2>/dev/null || true
+
+    # ── Service activation (Arch doesn't auto-enable these) ──
+    echo ""
+    echo "▶ Enabling NetworkManager and Bluetooth services..."
+    sudo systemctl enable --now NetworkManager.service 2>/dev/null || true
+    sudo systemctl enable --now bluetooth.service 2>/dev/null || true
+
+    # ── lp group (required for bluetoothctl on Arch) ──
+    : "${USER:=$(id -un)}"
+    if ! id -nG "$USER" | grep -qw lp; then
+        echo ""
+        echo "▶ Adding $USER to 'lp' group (required for Bluetooth toggle on Arch)..."
+        if sudo gpasswd -a "$USER" lp; then
+            echo "   ⚠️  You must log out and log back in before the Bluetooth toggle will work."
+        else
+            echo "   ⚠️  Couldn't add $USER to 'lp' group automatically — run 'sudo gpasswd -a $USER lp' manually."
+        fi
+    fi
 
 elif command -v apt-get &> /dev/null; then
     echo "▶ Debian/Ubuntu system detected (using apt)"
@@ -69,7 +91,8 @@ elif command -v apt-get &> /dev/null; then
         bluez \
         curl \
         gnome-calculator \
-        python3-requests
+        python3-requests \
+        xdg-utils
 
     # ── Fonts (optional but recommended) ──
     echo ""

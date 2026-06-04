@@ -20,7 +20,8 @@ if command -v dnf &> /dev/null; then
     bluez
 elif command -v pacman &> /dev/null; then
   echo "▶ Arch Linux system detected (using pacman)"
-  sudo pacman -Sy --noconfirm --needed \
+  echo "  (assumes 'sudo pacman -Syu' was run recently — using -S to avoid partial-upgrade risk)"
+  sudo pacman -S --noconfirm --needed \
     python-gobject \
     python-cairo \
     gtk3 \
@@ -29,7 +30,9 @@ elif command -v pacman &> /dev/null; then
     brightnessctl \
     networkmanager \
     bluez \
-    bluez-utils
+    bluez-utils \
+    xdg-utils \
+    libpulse
 elif command -v apt &> /dev/null; then
   echo "▶ Debian/Ubuntu system detected (using apt)"
   sudo apt update -qq
