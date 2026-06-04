@@ -29,6 +29,27 @@ if command -v dnf &> /dev/null; then
     echo "▶ Installing fonts..."
     sudo dnf install -y jetbrains-mono-fonts 2>/dev/null || true
 
+elif command -v pacman &> /dev/null; then
+    echo "▶ Arch Linux system detected (using pacman)"
+    echo "▶ Installing system packages..."
+    sudo pacman -Sy --noconfirm --needed \
+        python-gobject \
+        python-cairo \
+        gtk3 \
+        playerctl \
+        redshift \
+        networkmanager \
+        bluez \
+        bluez-utils \
+        curl \
+        gnome-calculator \
+        python-requests
+
+    # ── Fonts (optional but recommended) ──
+    echo ""
+    echo "▶ Installing fonts..."
+    sudo pacman -S --noconfirm --needed ttf-jetbrains-mono 2>/dev/null || true
+
 elif command -v apt-get &> /dev/null; then
     echo "▶ Debian/Ubuntu system detected (using apt)"
     echo "▶ Updating package list..."
@@ -56,7 +77,7 @@ elif command -v apt-get &> /dev/null; then
     sudo apt-get install -y fonts-jetbrains-mono 2>/dev/null || true
 
 else
-    echo "❌ Error: Package manager not supported (neither dnf nor apt-get found)."
+    echo "❌ Error: Package manager not supported (none of dnf, pacman, or apt-get found)."
     echo "   Please install dependencies manually."
     exit 1
 fi

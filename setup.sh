@@ -18,6 +18,18 @@ if command -v dnf &> /dev/null; then
     brightnessctl \
     NetworkManager \
     bluez
+elif command -v pacman &> /dev/null; then
+  echo "▶ Arch Linux system detected (using pacman)"
+  sudo pacman -Sy --noconfirm --needed \
+    python-gobject \
+    python-cairo \
+    gtk3 \
+    gdk-pixbuf2 \
+    redshift \
+    brightnessctl \
+    networkmanager \
+    bluez \
+    bluez-utils
 elif command -v apt &> /dev/null; then
   echo "▶ Debian/Ubuntu system detected (using apt)"
   sudo apt update -qq
@@ -32,7 +44,7 @@ elif command -v apt &> /dev/null; then
     network-manager \
     bluez
 else
-  echo "❌ Error: Package manager not supported (neither dnf nor apt found)."
+  echo "❌ Error: Package manager not supported (none of dnf, pacman, or apt found)."
   echo "   Please install dependencies manually."
   exit 1
 fi
