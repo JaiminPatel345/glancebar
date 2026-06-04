@@ -14,7 +14,7 @@
   <img src="https://img.shields.io/badge/Python-3.8+-3776AB?logo=python&logoColor=white" />
   <img src="https://img.shields.io/badge/GTK-3-4A90D9?logo=gnome&logoColor=white" />
   <img src="https://img.shields.io/badge/Cairo-vector_graphics-CC3333" />
-  <img src="https://img.shields.io/badge/platform-Ubuntu%20%7C%20Fedora-blue?logo=linux&logoColor=white" />
+  <img src="https://img.shields.io/badge/platform-Ubuntu%20%7C%20Fedora%20%7C%20Arch-blue?logo=linux&logoColor=white" />
   <img src="https://img.shields.io/badge/license-MIT-green" />
 </p>
 
@@ -61,9 +61,9 @@ Built with **Python 3 + GTK3 + Cairo**. No Electron. No bloat. No Qt. Just ~1000
 
 ## Before You Start
 
-This widget targets **Ubuntu / Debian or Fedora / RedHat-based distros with GNOME or similar**. Make sure you have:
+This widget targets **Ubuntu / Debian, Fedora / RedHat, or Arch-based distros with GNOME or similar**. Make sure you have:
 
-- **Ubuntu 20.04+** or **Fedora 38+** (or compatible distros)
+- **Ubuntu 20.04+**, **Fedora 38+**, or **Arch Linux** (or compatible distros)
 - **Python 3.8 or newer** — check with `python3 --version`
 - **Sudo access** (needed once, for the package installs)
 - **An internet connection** (for downloading packages and live weather)
@@ -149,6 +149,9 @@ sudo apt install picom
 
 # On Fedora:
 sudo dnf install picom
+
+# On Arch:
+sudo pacman -S picom
 ```
 
 ### 2. Enable blur in `~/.config/picom.conf`
@@ -318,7 +321,7 @@ pkill -f "python3.*widget.py"                           # stop it
 rm ~/.config/autostart/glancebar.desktop                # remove autostart
 cd .. && rm -rf glancebar                               # remove the folder
 ```
-If you want to also uninstall the system packages `install.sh` added, run `sudo apt remove playerctl redshift` (or `sudo dnf remove playerctl redshift` on Fedora) — though you might want to keep them, they're harmless.
+If you want to also uninstall the system packages `install.sh` added, run `sudo apt remove playerctl redshift` (or `sudo dnf remove playerctl redshift` on Fedora, or `sudo pacman -R playerctl redshift` on Arch) — though you might want to keep them, they're harmless.
 
 ---
 
@@ -359,7 +362,7 @@ Either the <code>icon</code> name in <code>config.json</code> doesn't match a th
 <details>
 <summary><b>Weather says "Unavailable".</b></summary>
 <br/>
-Check that <code>python3-requests</code> is installed (<code>sudo apt install python3-requests</code> or <code>sudo dnf install python3-requests</code>) and that you have an internet connection. Also verify your <code>city</code> field is spelled correctly — try the English name.
+Check that <code>python3-requests</code> is installed (<code>sudo apt install python3-requests</code>, <code>sudo dnf install python3-requests</code>, or <code>sudo pacman -S python-requests</code>) and that you have an internet connection. Also verify your <code>city</code> field is spelled correctly — try the English name.
 </details>
 
 <details>
@@ -402,13 +405,14 @@ You need to restart the widget to pick up config changes:<br/>
 **System packages** (installed by `install.sh`):
 - **Debian/Ubuntu**: `python3-gi`, `python3-gi-cairo`, `gir1.2-gtk-3.0`, `gir1.2-gdk-3.0`, `fonts-jetbrains-mono`
 - **Fedora**: `python3-gobject`, `python3-cairo`, `gtk3`, `jetbrains-mono-fonts`
+- **Arch**: `python-gobject`, `python-cairo`, `gtk3`, `ttf-jetbrains-mono`
 - **Common**:
   - `playerctl` — music metadata
   - `redshift` — night mode toggle
-  - `network-manager` / `NetworkManager` — Wi-Fi toggle
-  - `bluez` (and `bluetooth` on Debian) — Bluetooth toggle
+  - `network-manager` / `NetworkManager` / `networkmanager` — Wi-Fi toggle
+  - `bluez` (+ `bluetooth` on Debian, `bluez-utils` on Arch) — Bluetooth toggle
   - `pactl` — audio mute (usually pre-installed)
-  - `python3-requests` — live weather
+  - `python3-requests` / `python-requests` — live weather
 
 **Optional:**
 - `picom` — frosted-glass blur
@@ -421,7 +425,7 @@ Pull requests welcome — especially for:
 - More weather icons (see `_draw_weather_icon` in `widgets/left_panel.py`)
 - Additional system toggles
 - Color palette presets
-- Ports to other distros (Arch, etc. — Fedora is now supported!)
+- Ports to other distros (openSUSE, Alpine, NixOS — Ubuntu, Fedora, and Arch are now supported!)
 
 If you build something cool with this, tag me — I'd love to see it.
 
