@@ -73,6 +73,24 @@ You do **not** need to install anything manually — `install.sh` handles GTK3, 
 
 > **⚠️ Note:** Some features depend on system services being enabled — Bluetooth toggle won't work if the `bluetooth` service is disabled, Wi-Fi toggle needs NetworkManager, etc. If your distro uses something different (e.g. `iwd` instead of NetworkManager), edit the commands in `config.json` (see the [config guide](#3-system-toggles-wi-fi--bluetooth--night--mute) below).
 
+### Arch Linux notes
+
+A few extra things to know if you're on Arch:
+
+- **Run `sudo pacman -Syu` first.** `install.sh` uses `pacman -S` (not `-Sy`) to avoid the [partial-upgrade footgun](https://wiki.archlinux.org/title/System_maintenance#Partial_upgrades_are_unsupported). Make sure your system is up to date before running it.
+- **Night-mode toggle (`redshift`) does not work on Wayland.** GNOME on Arch defaults to a Wayland session, and `redshift` is X11-only (upstream archived in 2026). Three options:
+  1. Pick the **"GNOME on Xorg"** session at login if you want `redshift` to work as-is.
+  2. On Wayland, switch the night toggle to GNOME's built-in Night Light by editing `config.json`:
+     ```json
+     { "label": "Night",
+       "icon": "moon",
+       "cmd_on":  ["gsettings", "set", "org.gnome.settings-daemon.plugins.color", "night-light-enabled", "true"],
+       "cmd_off": ["gsettings", "set", "org.gnome.settings-daemon.plugins.color", "night-light-enabled", "false"] }
+     ```
+  3. On non-GNOME Wayland compositors (Hyprland, Sway), install `gammastep` (`sudo pacman -S gammastep`) and replace `redshift` with `gammastep` in the toggle commands.
+- **Bluetooth needs `lp` group membership.** `install.sh` adds your user to the `lp` group automatically; **log out and back in** for it to take effect, otherwise the Bluetooth toggle will silently fail.
+- **NetworkManager and Bluetooth services** are enabled by `install.sh` (Arch does not auto-enable them like Ubuntu/Fedora do).
+
 ---
 
 ## Try It First (quick preview)
@@ -405,13 +423,14 @@ You need to restart the widget to pick up config changes:<br/>
 **System packages** (installed by `install.sh`):
 - **Debian/Ubuntu**: `python3-gi`, `python3-gi-cairo`, `gir1.2-gtk-3.0`, `gir1.2-gdk-3.0`, `fonts-jetbrains-mono`
 - **Fedora**: `python3-gobject`, `python3-cairo`, `gtk3`, `jetbrains-mono-fonts`
-- **Arch**: `python-gobject`, `python-cairo`, `gtk3`, `ttf-jetbrains-mono`
+- **Arch**: `python-gobject`, `python-cairo`, `gtk3`, `libpulse`, `ttf-jetbrains-mono`
 - **Common**:
   - `playerctl` — music metadata
-  - `redshift` — night mode toggle
+  - `redshift` — night mode toggle (X11 only — see [Arch Linux notes](#arch-linux-notes) for Wayland)
   - `network-manager` / `NetworkManager` / `networkmanager` — Wi-Fi toggle
   - `bluez` (+ `bluetooth` on Debian, `bluez-utils` on Arch) — Bluetooth toggle
-  - `pactl` — audio mute (usually pre-installed)
+  - `pactl` — audio mute (in `libpulse` on Arch; usually pre-installed elsewhere)
+  - `xdg-utils` — opens folders and links via `xdg-open`
   - `python3-requests` / `python-requests` — live weather
 
 **Optional:**
