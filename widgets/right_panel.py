@@ -30,6 +30,7 @@ class RightPanel(Gtk.DrawingArea):
         self._hover_app = -1
         self._hover_act = -1
         self._apps = []
+        self._apps_from_recent = False
         self.set_events(
             Gdk.EventMask.BUTTON_PRESS_MASK |
             Gdk.EventMask.POINTER_MOTION_MASK |
@@ -45,6 +46,7 @@ class RightPanel(Gtk.DrawingArea):
     def _refresh_apps(self):
         """Fetch recent apps (blocking) then preload icons on the GTK thread."""
         apps = get_recent_apps(6)
+        self._apps_from_recent = bool(apps)
         if not apps:
             apps = CFG.get("apps", [])  # fallback to config
         self._apps = apps
@@ -119,14 +121,14 @@ class RightPanel(Gtk.DrawingArea):
     def _draw(self, widget, cr):
         pad = self.PAD
 
-        # ── "Recent Apps" label ──
-        cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
-        cr.set_font_size(10); sc(cr, DIM)
-        cr.move_to(pad + 2, _APP_TOP - 4); cr.show_text("RECENT APPS")
+        # ── "Recent Apps" label (only when sourced from GNOME usage data) ──
+        if self._apps_from_recent:
+            cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+            cr.set_font_size(10); sc(cr, DIM)
+            cr.move_to(pad + 2, _APP_TOP - 4); cr.show_text("RECENT APPS")
 
         # ── App rows ──
         for i, app in enumerate(self._apps):
-
             x, y, bw, bh = self._app_rect(i)
             is_h = (i == self._hover_app)
             ac = tuple(app["color"])
