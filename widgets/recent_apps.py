@@ -11,8 +11,6 @@ Name, Exec, and Icon so we can build a glancebar-compatible app dict.
 
 import os
 import re
-import glob
-import subprocess
 
 # ── Desktop-file search paths (ordered by priority) ──────────────────────────
 _DESKTOP_SEARCH = [
