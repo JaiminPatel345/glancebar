@@ -7,17 +7,35 @@
 set -e
 
 echo "📦 Installing dependencies..."
-sudo apt update -qq
-sudo apt install -y \
-  python3-gi \
-  python3-gi-cairo \
-  gir1.2-gtk-3.0 \
-  gir1.2-gdkpixbuf-2.0 \
-  python3-cairo \
-  redshift \
-  brightnessctl \
-  network-manager \
-  bluez
+if command -v dnf &> /dev/null; then
+  echo "▶ Fedora/RedHat system detected (using dnf)"
+  sudo dnf install -y \
+    python3-gobject \
+    python3-cairo \
+    gtk3 \
+    gdk-pixbuf2 \
+    redshift \
+    brightnessctl \
+    NetworkManager \
+    bluez
+elif command -v apt &> /dev/null; then
+  echo "▶ Debian/Ubuntu system detected (using apt)"
+  sudo apt update -qq
+  sudo apt install -y \
+    python3-gi \
+    python3-gi-cairo \
+    gir1.2-gtk-3.0 \
+    gir1.2-gdkpixbuf-2.0 \
+    python3-cairo \
+    redshift \
+    brightnessctl \
+    network-manager \
+    bluez
+else
+  echo "❌ Error: Package manager not supported (neither dnf nor apt found)."
+  echo "   Please install dependencies manually."
+  exit 1
+fi
 
 echo ""
 echo "📁 Creating config directory..."
